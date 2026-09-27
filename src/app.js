@@ -6,23 +6,24 @@ import { testConnection } from "./config/db.js";
 import routerBiblioTK from "./router/routerBiblioTK.js";
 
 const app = express();
-const puerto = Number(process.env.PORT) || 3004;
+const puerto = Number(process.env.PORT) || 3003;
 
 app.use(express.json());
 app.use(cookieParser());
+
+const allowedOrigins = Object.entries(process.env)
+  .filter(([key, value]) => key.startsWith('ALLOWED_ORIGIN_') && value)
+  .map(([, origin]) => origin.trim());
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5172",
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "http://localhost:5145",
-    ],
+    origin: allowedOrigins,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
-);
+);;
+
 
 app.use("/MaterialesBiblioTK", routerBiblioTK);
 
