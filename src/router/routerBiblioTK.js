@@ -8,6 +8,7 @@ import {
 } from "../controllers/materialesController.js";
 import { verificarRolAdmin } from "../middlewares/verificarRolAdmin.js";
 import { verificarSesion } from "../middlewares/verificarSesion.js";
+import { recibirPortada } from "../utils/portadas.js";
 
 const router = Router();
 
@@ -19,9 +20,23 @@ router.get("/health", (_req, res) => {
 router.get("/Materiales", listarMateriales);
 router.get("/Materiales/:id", obtenerMaterial);
 
-// Escritura solo para el bibliotecario (rol admin)
-router.post("/Materiales", verificarSesion, verificarRolAdmin, crearMaterial);
-router.put("/Materiales/:id", verificarSesion, verificarRolAdmin, actualizarMaterial);
+// Escritura solo para el bibliotecario (rol admin). Aceptan JSON o multipart/form-data
+// con la portada en el campo "imagen" (recibirPortada va después de la sesión:
+// nadie sin permiso llega a escribir un archivo en disco)
+router.post(
+  "/Materiales",
+  verificarSesion,
+  verificarRolAdmin,
+  recibirPortada,
+  crearMaterial,
+);
+router.put(
+  "/Materiales/:id",
+  verificarSesion,
+  verificarRolAdmin,
+  recibirPortada,
+  actualizarMaterial,
+);
 router.delete("/Materiales/:id", verificarSesion, verificarRolAdmin, eliminarMaterial);
 
 export default router;

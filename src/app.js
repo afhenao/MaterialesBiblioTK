@@ -3,7 +3,9 @@ import cors from "cors";
 import "dotenv/config";
 import express from "express";
 import { testConnection } from "./config/db.js";
+import { asegurarColumnasPortada } from "./config/esquema.js";
 import routerBiblioTK from "./router/routerBiblioTK.js";
+import { carpetaPortadas, rutaPublicaPortadas } from "./utils/portadas.js";
 
 const app = express();
 const puerto = Number(process.env.PORT) || 3003;
@@ -24,6 +26,14 @@ app.use(
   }),
 );;
 
+// Portadas guardadas en local. nosniff: el navegador no puede tratarlas como otra cosa que imagen
+app.use(
+  rutaPublicaPortadas,
+  express.static(carpetaPortadas, {
+    maxAge: "7d",
+    setHeaders: (res) => res.setHeader("X-Content-Type-Options", "nosniff"),
+  }),
+);
 
 app.use("/MaterialesBiblioTK", routerBiblioTK);
 
@@ -42,6 +52,7 @@ app.use((error, _req, res, _next) => {
 async function iniciarServidor() {
   try {
     await testConnection();
+    await asegurarColumnasPortada();
     app.listen(puerto, () => {
       console.log(`Servicio de materiales corriendo en el puerto ${puerto}`);
     });

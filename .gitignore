@@ -1,2 +1,4 @@
 node_modules/
 .env
+# Portadas subidas en local (cada integrante tiene las suyas; la copia compartida vive en Cloudinary)
+uploads/
