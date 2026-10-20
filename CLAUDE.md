@@ -4,6 +4,7 @@ Parte del sistema BiblioTK (ver `../CLAUDE.md`). Permite consultar y administrar
 
 - **Puerto:** 3003 (`PORT` en `.env`)
 - **Arranque:** `npm run dev` (`node --watch src/app.js`). Solo levanta el servidor si `testConnection()` funciona y `asegurarColumnasPortada()` pudo revisar/agregar las columnas de portada.
+- **Docker:** `Dockerfile` (node:24-alpine, solo dependencias de producción, usuario `node`, sin `.env`: la configuración llega por variables de entorno); las portadas locales van en un volumen montado en `/app/uploads`. Se orquesta desde `../InfraBiblioTK` (Compose y Kubernetes).
 - **Dependencias clave:** express 5, mysql2, cookie-parser, cors, dotenv, **multer** (subida de portadas) y **cloudinary** (copia remota opcional). `jsonwebtoken` sigue en `package.json`, pero ya no se usa.
 - **Variables (`.env`, ver `.env.example`):** `PORT=3003`, `DB_*`, `ALLOWED_ORIGIN_*` (un origen por variable) y, opcionales, `CLOUDINARY_URL` **o** `CLOUDINARY_CLOUD_NAME` + `CLOUDINARY_API_KEY` + `CLOUDINARY_API_SECRET`.
 
