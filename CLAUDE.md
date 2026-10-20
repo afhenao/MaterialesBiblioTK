@@ -4,8 +4,8 @@ Parte del sistema BiblioTK (ver `../CLAUDE.md`). Permite consultar y administrar
 
 - **Puerto:** 3003 (`PORT` en `.env`)
 - **Arranque:** `npm run dev` (`node --watch src/app.js`). Solo levanta el servidor si `testConnection()` funciona y `asegurarColumnasPortada()` pudo revisar/agregar las columnas de portada.
-- **Dependencias clave:** express 5, mysql2, cookie-parser, jsonwebtoken, cors, dotenv, **multer** (subida de portadas) y **cloudinary** (copia remota opcional)
-- **Variables (`.env`, ver `.env.example`):** `PORT=3003`, `DB_*`, `JWT_SECRET` (**el mismo de InicioSesionBiblioTK**: este servicio no emite tokens, solo verifica la cookie `token_acceso`), `ALLOWED_ORIGIN_*` (un origen por variable) y, opcionales, `CLOUDINARY_URL` **o** `CLOUDINARY_CLOUD_NAME` + `CLOUDINARY_API_KEY` + `CLOUDINARY_API_SECRET`.
+- **Dependencias clave:** express 5, mysql2, cookie-parser, cors, dotenv, **multer** (subida de portadas) y **cloudinary** (copia remota opcional). `jsonwebtoken` sigue en `package.json`, pero ya no se usa.
+- **Variables (`.env`, ver `.env.example`):** `PORT=3003`, `DB_*`, `ALLOWED_ORIGIN_*` (un origen por variable) y, opcionales, `CLOUDINARY_URL` **o** `CLOUDINARY_CLOUD_NAME` + `CLOUDINARY_API_KEY` + `CLOUDINARY_API_SECRET`.
 
 ## Estructura
 
@@ -14,7 +14,7 @@ Parte del sistema BiblioTK (ver `../CLAUDE.md`). Permite consultar y administrar
 - `src/config/esquema.js` — agrega `imagen_local` e `imagen_url` a `materiales` si faltan (una sola vez, al arrancar)
 - `src/config/cloudinary.js` — lee las credenciales; `cloudinaryActivo` es `false` si no hay
 - `src/utils/portadas.js` — `recibirPortada` (multer: campo `imagen`, JPG/PNG/WEBP, máx. 3 MB), firma real del archivo, subida/borrado en Cloudinary y `conPortada` (URLs absolutas para la API)
-- `src/middlewares/verificarSesion.js` / `verificarRolAdmin.js`
+- `src/middlewares/verificarSesion.js` / `verificarRolAdmin.js` — la sesión se busca en la tabla `sesiones` (mismo archivo que en Perfil, ver `../PerfilBiblioTK/CLAUDE.md`); `JWT_SECRET` ya no se usa
 - `src/router/routerBiblioTK.js`
 - `src/controllers/materialesController.js` — `listarMateriales`, `obtenerMaterial`, `crearMaterial`, `actualizarMaterial`, `eliminarMaterial`
 
