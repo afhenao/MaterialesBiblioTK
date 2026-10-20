@@ -15,6 +15,7 @@ Parte del sistema BiblioTK (ver `../CLAUDE.md`). Permite consultar y administrar
 - `src/config/cloudinary.js` — lee las credenciales; `cloudinaryActivo` es `false` si no hay
 - `src/utils/portadas.js` — `recibirPortada` (multer: campo `imagen`, JPG/PNG/WEBP, máx. 3 MB), firma real del archivo, subida/borrado en Cloudinary y `conPortada` (URLs absolutas para la API)
 - `src/middlewares/verificarSesion.js` / `verificarRolAdmin.js` — la sesión se busca en la tabla `sesiones` (mismo archivo que en Perfil, ver `../PerfilBiblioTK/CLAUDE.md`); `JWT_SECRET` ya no se usa
+- `src/utils/notificar.js` — avisa a NotificacionesBiblioTK (`material.creado`, `material.actualizado`, `material.eliminado`; los ve el bibliotecario) después de cada escritura, sin esperar respuesta. Opcionales: `NOTIFICACIONES_URL` y `NOTIFICACIONES_CLAVE`
 - `src/router/routerBiblioTK.js`
 - `src/controllers/materialesController.js` — `listarMateriales`, `obtenerMaterial`, `crearMaterial`, `actualizarMaterial`, `eliminarMaterial`
 

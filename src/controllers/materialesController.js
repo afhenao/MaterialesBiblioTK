@@ -1,4 +1,5 @@
 import pool from "../config/db.js";
+import { notificar } from "../utils/notificar.js";
 import {
   borrarDeCloudinary,
   borrarPortadaLocal,
@@ -265,6 +266,11 @@ export async function crearMaterial(req, res, next) {
       ],
     );
 
+    notificar("material.creado", {
+      materialId: resultado.insertId,
+      titulo: material.titulo,
+    });
+
     return res.status(201).json({
       message: "Material registrado",
       material: conPortada(req, await buscarFila(resultado.insertId)),
@@ -324,6 +330,11 @@ export async function actualizarMaterial(req, res, next) {
 
     await limpiarPortadasViejas(existente, portada);
 
+    notificar("material.actualizado", {
+      materialId: Number(req.params.id),
+      titulo: material.titulo,
+    });
+
     return res.json({
       message: "Material actualizado",
       material: conPortada(req, await buscarFila(req.params.id)),
@@ -358,6 +369,11 @@ export async function eliminarMaterial(req, res, next) {
 
     await pool.query("DELETE FROM materiales WHERE id = ?", [req.params.id]);
     await limpiarPortadasViejas(existente, { imagenLocal: null, imagenUrl: null });
+
+    notificar("material.eliminado", {
+      materialId: Number(req.params.id),
+      titulo: existente.titulo,
+    });
 
     return res.json({ message: "Material eliminado" });
   } catch (error) {
