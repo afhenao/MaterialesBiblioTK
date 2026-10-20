@@ -94,7 +94,7 @@ function validarMaterial(material) {
   if (
     !Number.isInteger(material.anioPublicacion) ||
     material.anioPublicacion < 1400 ||
-    material.anioPublicacion > anioActual + 1
+    material.anioPublicacion > anioActual 
   ) {
     return { campo: "anioPublicacion", message: "El año de publicación no es válido." };
   }
