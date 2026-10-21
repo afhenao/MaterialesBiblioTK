@@ -52,7 +52,7 @@ Con los largos reales de la tabla: `titulo` (máx. 150) y `autor` (máx. 100) re
 
 ### DELETE `/Materiales/:id`
 
-Antes de borrar comprueba `prestamos` con `estado IN ('ACTIVO', 'VENCIDO')` y responde 409 si hay alguno. Los préstamos `DEVUELTO` se borran en cascada, pero su historial queda en la tabla `reportes` (ver PrestamosBiblioTK).
+Antes de borrar comprueba `prestamos` con `estado IN ('SOLICITADO', 'ACTIVO', 'VENCIDO')` y responde 409 si hay alguno (una solicitud sin responder también bloquea). Los préstamos `DEVUELTO` se borran en cascada, pero su historial queda en la tabla `reportes` (ver PrestamosBiblioTK).
 
 ## Problemas conocidos
 

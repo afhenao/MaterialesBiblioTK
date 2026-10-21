@@ -354,16 +354,18 @@ export async function eliminarMaterial(req, res, next) {
       return res.status(404).json({ message: "No se encontró el material" });
     }
 
-    // prestamos.material_id tiene ON DELETE CASCADE: sin este control se perderían préstamos sin devolver
+    // prestamos.material_id tiene ON DELETE CASCADE: sin este control se perderían préstamos sin
+    // devolver o solicitudes que el lector espera que le aprueben
     const [[{ pendientes }]] = await pool.query(
       `SELECT COUNT(*) AS pendientes FROM prestamos
-       WHERE material_id = ? AND estado IN ('ACTIVO', 'VENCIDO')`,
+       WHERE material_id = ? AND estado IN ('SOLICITADO', 'ACTIVO', 'VENCIDO')`,
       [req.params.id],
     );
 
     if (Number(pendientes) > 0) {
       return res.status(409).json({
-        message: "No se puede eliminar: hay préstamos de este material sin devolver.",
+        message:
+          "No se puede eliminar: hay préstamos de este material sin devolver o solicitudes sin responder.",
       });
     }
 
